@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import ApiError from "../ApiError.js";
+import ApiError from "../utils/ApiError.js";
 
 const connectDb = async () => {
   try {
