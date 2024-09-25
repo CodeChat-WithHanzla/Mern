@@ -23,7 +23,5 @@ export const SignUp = asyncHandler(async (req, res, next) => {
 
   return res
     .status(200)
-    .json(
-      new ApiResponse(200, { username, email, password }, "Successfull sign-up")
-    );
+    .json(new ApiResponse(200, createdUser, "Successfull sign-up"));
 });
