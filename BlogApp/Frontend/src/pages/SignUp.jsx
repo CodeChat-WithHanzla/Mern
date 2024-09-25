@@ -1,6 +1,7 @@
 import { Alert, Button, Label, Spinner, TextInput } from 'flowbite-react'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { Logo } from '../components'
 
 function SignUp() {
   const [formData, setFormData] = useState({})
@@ -40,10 +41,7 @@ function SignUp() {
       <div className="flex p-3 gap-5 max-w-3xl mx-auto flex-col md:flex-row">
         {/* left Side div */}
         <div className="flex-1">
-          <Link to='/' className='text-4xl  font-bold dark:text-white'>
-            <span className='px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-white'>Hanzla's</span>
-            Blog
-          </Link>
+          <Logo />
           <p className='text-sm mt-5 '>Join our community and start sharing your thoughts with the world.
             Your voice matters – let it be heard.</p>
         </div>
