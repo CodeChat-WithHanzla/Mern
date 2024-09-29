@@ -2,12 +2,15 @@ import React from 'react'
 import { Avatar, Button, Dropdown, Navbar, TextInput } from 'flowbite-react'
 import { Link, useLocation } from 'react-router-dom'
 import { AiOutlineSearch } from 'react-icons/ai'
-import { FaMoon } from 'react-icons/fa'
+import { FaMoon, FaSun } from 'react-icons/fa'
 import { Logo } from './index'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { toggleTheme } from '../slices/themeSlice'
 function Header() {
   const { pathname } = useLocation();
   const { currentUser } = useSelector(state => state.user)
+  const dispatch = useDispatch()
+  const mode = useSelector(state => state.theme.mode)
   return (
     <Navbar className='border-b-2'>
       <Logo className='self-center whitespace-nowrap text-sm' />
@@ -23,8 +26,8 @@ function Header() {
         <AiOutlineSearch />
       </Button>
       <div className='flex gap-2 md:order-2'>
-        <Button className='w-12 h-10 hidden sm:inline' color='gray' pill>
-          <FaMoon />
+        <Button className='w-12 h-10 hidden sm:inline' color='gray' pill onClick={() => dispatch(toggleTheme())}>
+          {mode === 'light' ? <FaMoon /> : <FaSun />}
         </Button>
         {currentUser ? (<Dropdown arrowIcon={false} inline label={<Avatar alt='user' img={currentUser.data.ProfilePicture} rounded />}>
           <Dropdown.Header>

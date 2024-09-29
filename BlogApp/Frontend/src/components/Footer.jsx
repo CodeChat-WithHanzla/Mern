@@ -56,7 +56,7 @@ export default function FooterCom() {
                 <div className="w-full sm:flex sm:items-center sm:justify-between">
                     <Footer.Copyright href='#' by="Hanzla's Blog" year={new Date().getFullYear()} />
 
-                    <div className="flex gap-6 sm:mt-0 mt4 sm:justify-center">
+                    <div className="flex gap-6 sm:mt-0 mt4 sm:justify-center mt-3">
                         <Footer.Icon href='#' icon={BsFacebook} />
                         <Footer.Icon href='#' icon={BsFacebook} />
                         <Footer.Icon href='#' icon={BsFacebook} />
