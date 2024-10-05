@@ -21,7 +21,7 @@ function DashSideBar() {
                         </Sidebar.Item>
                     </Link>
                     <Sidebar.Item icon={HiArrowSmRight} className='cursor-pointer'>
-                        Profile
+                        Sign Out
                     </Sidebar.Item>
                 </Sidebar.ItemGroup>
             </Sidebar.Items>
