@@ -1,7 +1,5 @@
 import { Router } from "express";
-
-const router = Router();
-router.get("/test", (req_, res) => {
-  res.json({ message: "New Api created" });
-});
-export default router;
+import { updateUser } from "../controllers/user.controllers.js";
+const userRouter = Router();
+userRouter.put("/update/:userId", updateUser);
+export default userRouter;
