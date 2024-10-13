@@ -8,6 +8,11 @@ export const updateUser = asyncHandler(async (req, res) => {
       .status(400)
       .json(new ApiError(400, "User ID is required for updating"));
   }
+  if (req.user._id.toString() !== userId) {
+    return res
+      .status(403)
+      .json(new ApiError(403, "You are not authorized to update this user"));
+  }
   const { username, email, password, ProfilePicture } = req.body;
   const updates = {};
   const fields = { username, email, password, ProfilePicture };
@@ -19,6 +24,6 @@ export const updateUser = asyncHandler(async (req, res) => {
     }
   });
   const user = await User.findByIdAndUpdate(userId, updates, { new: true });
-  if (!user) throw new ApiError(400, "User not found");
+  if (!user) throw new ApiError(404, "User not found");
   return res.status(200).json(new ApiResponse(200, user, "User updated!"));
 });
