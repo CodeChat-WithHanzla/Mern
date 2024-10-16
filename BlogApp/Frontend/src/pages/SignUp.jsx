@@ -1,28 +1,44 @@
-import { Alert, Button, Label, Spinner, TextInput } from 'flowbite-react'
-import { useState } from 'react'
+import { Alert, Button, FileInput, Label, Spinner, TextInput } from 'flowbite-react'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Logo, OAuth } from '../components'
 
 function SignUp() {
-  const [formData, setFormData] = useState({})
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: '',
+    ProfilePicture: null,
+  });
+
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.id]: e.target.value.trim() })
+    const { id, value, files } = e.target
+    setFormData((prevData) => ({
+      ...prevData,
+      [id]: files ? files[0] : value.trim()
+    }))
   }
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true)
     setError(null)
     if (!formData.username || !formData.email || !formData.password) {
+      setLoading(false)
       return setError("Please fill out all the fields.")
     }
+    const payload = new FormData();
+    Object.entries(formData).forEach(([key, value]) => {
+      payload.append(key, value);
+    });
+
+
     try {
       const res = await fetch('/api/v1/auth/signup', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: payload,
       })
       const data = await res.json()
       if (data.success === false)
@@ -59,6 +75,10 @@ function SignUp() {
             <div>
               <Label value='Your Password' />
               <TextInput type='password' placeholder='Password' id='password' onChange={handleChange} />
+            </div>
+            <div>
+              <Label value='Upload file' />
+              <FileInput accept="image/*" helperText="JPEG, PNG, or JPG (Max: 2MB)" id='ProfilePicture' onChange={handleChange} />
             </div>
             <Button gradientDuoTone='purpleToPink' type='submit' disabled={loading}>
               {loading ? (

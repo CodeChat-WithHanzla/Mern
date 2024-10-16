@@ -1,6 +1,11 @@
 import User from "../models/users.models.js";
 import bcryptjs from "bcryptjs";
-import { ApiError, ApiResponse, asyncHandler } from "../utils/index.js";
+import {
+  ApiError,
+  ApiResponse,
+  asyncHandler,
+  uploadOnCloudinary,
+} from "../utils/index.js";
 const generateAccessAndRefreshToken = async (userId) => {
   try {
     const user = await User.findById(userId);
@@ -22,13 +27,27 @@ export const SignUp = asyncHandler(async (req, res) => {
     if (field?.trim() === "")
       throw new ApiError(400, "All fields are Required");
   });
-  const hashedPassword = bcryptjs.hashSync(password, 10);
+  let hashedPassword;
+  try {
+    hashedPassword = bcryptjs.hashSync(password, 10);
+  } catch (error) {
+    throw new ApiError(500, "Error while hashing password");
+  }
+
   const existedUser = await User.findOne({ $or: [{ username }, { email }] });
   if (existedUser) {
     throw new ApiError(409, "User with email or username already exists");
   }
 
-  const user = await User.create({ username, email, password: hashedPassword });
+  const ProfilePicture_localPath = req.file?.path;
+  const ProfilePicture = await uploadOnCloudinary(ProfilePicture_localPath);
+
+  const user = await User.create({
+    username,
+    email,
+    password: hashedPassword,
+    ProfilePicture: ProfilePicture?.url,
+  });
   const createdUser = await User.findById(user._id).select(
     "-password -refreshToken"
   );
