@@ -11,9 +11,7 @@ function Header() {
   const { currentUser } = useSelector(state => state.user)
   const dispatch = useDispatch()
   const mode = useSelector(state => state.theme.mode)
-  console.log(currentUser?.data?.ProfilePicture);
-
-  return (
+     return (
     <Navbar className='border-b-2'>
       <Logo className='self-center whitespace-nowrap text-sm' />
       <form>
