@@ -31,6 +31,8 @@ function DashProfile() {
     const handleSubmit = async (e) => {
         SetUploadError(null)
         e.preventDefault()
+        if (Object.key(formData) === 0)
+            return;
         const payload = new FormData()
         Object.entries(formData).forEach(([key, value]) => {
             payload.append(key, value)
