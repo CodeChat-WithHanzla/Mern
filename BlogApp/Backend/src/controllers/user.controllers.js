@@ -32,6 +32,41 @@ export const updateUser = asyncHandler(async (req, res) => {
   });
   if (ProfilePicture) updates.ProfilePicture = ProfilePicture?.url;
   const user = await User.findByIdAndUpdate(userId, updates, { new: true });
-  if (!user) throw new ApiError(404, "User not found");
-  return res.status(200).json(new ApiResponse(200, user, "User updated!"));
+  if (!user) throw new ApiError(404, "The specified user could not be found.");
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        user,
+        "The user information has been successfully updated!"
+      )
+    );
+});
+export const deleteUser = asyncHandler(async (req, res) => {
+  const userId = req.params.userId;
+  if (!userId) {
+    return res
+      .status(400)
+      .json(
+        new ApiError(400, "A User ID is required to proceed with the deletion")
+      );
+  }
+  if (req.user._id.toString() !== userId) {
+    return res
+      .status(403)
+      .json(
+        new ApiError(403, "You do not have permission to delete this user.")
+      );
+  }
+  await User.findByIdAndDelete(userId);
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        "",
+        "The user account has been successfully deleted."
+      )
+    );
 });
