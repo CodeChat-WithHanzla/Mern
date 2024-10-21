@@ -70,7 +70,6 @@ function DashProfile() {
 
         } catch (error) {
             dispatch(updateFailure(error.message))
-                (`Updating error :: ${error}`)
         }
     }
     useEffect(() => {
