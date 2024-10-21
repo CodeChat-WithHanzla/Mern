@@ -9,9 +9,11 @@ import { toggleTheme } from '../slices/themeSlice'
 function Header() {
   const { pathname } = useLocation();
   const { currentUser } = useSelector(state => state.user)
+  // console.log(currentUser);
+
   const dispatch = useDispatch()
   const mode = useSelector(state => state.theme.mode)
-     return (
+  return (
     <Navbar className='border-b-2'>
       <Logo className='self-center whitespace-nowrap text-sm' />
       <form>

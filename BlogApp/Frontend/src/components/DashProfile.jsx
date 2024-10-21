@@ -1,11 +1,15 @@
 import { useSelector } from 'react-redux'
-import { Alert, Button, TextInput, Spinner } from 'flowbite-react'
+import { Alert, Button, TextInput, Spinner, Modal } from 'flowbite-react'
 import { useEffect, useRef, useState } from 'react'
 import 'react-circular-progressbar/dist/styles.css';
+import { HiOutlineExclamationCircle } from 'react-icons/hi';
 import {
     updateStart,
     updateSuccess,
     updateFailure,
+    deleteStart,
+    deleteSuccess,
+    deleteFailure,
 } from '../slices/userSlice'
 import { useDispatch } from 'react-redux';
 function DashProfile() {
@@ -16,6 +20,7 @@ function DashProfile() {
     const dispatch = useDispatch();
     const [alertMessage, setAlertMessage] = useState(null);
     const [alertColor, setAlertColor] = useState('success');
+    const [modal, setModal] = useState(false)
     const handleChange = (e) => {
         const { id, value, files } = e.target
 
@@ -76,6 +81,24 @@ function DashProfile() {
             return () => clearTimeout(timer);
         }
     }, [alertMessage])
+    const handleDeleteUser = async () => {
+        setModal(false)
+        try {
+            dispatch(deleteStart())
+            const response = await fetch(`/api/v1/delete/${currentUser?._id}`, {
+                method: 'DELETE'
+            })
+            const { message } = await response.json()
+            if (!response.ok) {
+                setAlertMessage(message)
+                setAlertColor('failure')
+                return dispatch(deleteFailure(message))
+            }
+            dispatch(deleteSuccess())
+        } catch (error) {
+            dispatch(deleteStart(error.message))
+        }
+    }
     return (
         <div className='max-w-lg mx-auto p-3 w-full'>
             <h1 className='my-7 text-center font-semibold text-3xl'>Profile</h1>
@@ -94,12 +117,25 @@ function DashProfile() {
                     </>) : "Update"}</Button>
             </form>
             <div className="flex justify-between text-red-500 mt-5 cursor-pointer">
-                <span>Delete Account</span>
+                <span onClick={() => setModal(true)}>Delete Account</span>
                 <span>Sign Out</span>
             </div>
             {
                 alertMessage && <Alert className='mt-5 animate-shake' color={alertColor}>{alertMessage}</Alert>
             }
+            <Modal show={modal} onClose={() => setModal(false)} popup size='md'>
+                <Modal.Header />
+                <Modal.Body>
+                    <div className="text-center">
+                        <HiOutlineExclamationCircle className='h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto' />
+                        <h3 className='mb-5 text-lg text-gray-500 dark:text-gray-400'>Are you sure you want to delete your account?</h3>
+                        <div className="flex justify-center gap-4">
+                            <Button color='failure' onClick={handleDeleteUser}>Yes I'm sure</Button>
+                            <Button color='gray' onClick={() => setModal(false)}>No,cancel</Button>
+                        </div>
+                    </div>
+                </Modal.Body>
+            </Modal>
         </div>
     )
 }

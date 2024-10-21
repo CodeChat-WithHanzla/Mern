@@ -2,18 +2,22 @@ import { Alert, Button, FileInput, Label, Spinner, TextInput } from 'flowbite-re
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Logo, OAuth } from '../components'
-
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  signUpStart,
+  signUpSuccess,
+  signUpFailure,
+} from '../slices/userSlice'
 function SignUp() {
+  const dispatch = useDispatch()
   const [formData, setFormData] = useState({
     username: '',
     email: '',
     password: '',
     ProfilePicture: null,
   });
-
-  const [error, setError] = useState(null)
-  const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
+  const { loading, error } = useSelector(state => state.user)
   const handleChange = (e) => {
     const { id, value, files } = e.target
     setFormData((prevData) => ({
@@ -23,11 +27,8 @@ function SignUp() {
   }
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true)
-    setError(null)
     if (!formData.username || !formData.email || !formData.password) {
-      setLoading(false)
-      return setError("Please fill out all the fields.")
+      return dispatch(signUpFailure("Please fill out all the fields."))
     }
     const payload = new FormData();
     Object.entries(formData).forEach(([key, value]) => {
@@ -36,20 +37,18 @@ function SignUp() {
 
 
     try {
+      dispatch(signUpStart())
       const res = await fetch('/api/v1/auth/signup', {
         method: 'POST',
         body: payload,
       })
-      const data = await res.json()
-      if (data.success === false)
-        return setError(data.message)
-      if (res.ok)
-        navigate('/sign-in')
+      const { data, message } = await res.json()
+      if (!res.ok)
+        return dispatch(signUpFailure(message))
+      dispatch(signUpSuccess(data))
+      navigate('/sign-in')
     } catch (error) {
-      setError(`Error :: ${error.message}`);
-    }
-    finally {
-      setLoading(false)
+      dispatch(signUpFailure(error.message))
     }
   }
   return (
