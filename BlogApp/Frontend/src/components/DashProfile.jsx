@@ -46,6 +46,12 @@ function DashProfile() {
             setAlertColor('failure')
             return dispatch(updateFailure('No data provided for update. Please fill out the form.'));
         }
+        if (Object.values(formData).every(value => value === '')) {
+            setAlertMessage('Fields are empty.');
+            setAlertColor('failure');
+            dispatch(updateFailure('Fields are empty.'));
+            return;
+        }
         const payload = new FormData()
         Object.entries(formData).forEach(([key, value]) => {
             payload.append(key, value)
