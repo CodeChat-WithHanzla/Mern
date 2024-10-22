@@ -6,6 +6,11 @@ import { FaMoon, FaSun } from 'react-icons/fa'
 import { Logo } from './index'
 import { useDispatch, useSelector } from 'react-redux'
 import { toggleTheme } from '../slices/themeSlice'
+import {
+  signOutStart,
+  signOutSuccess,
+  signOutFailure,
+} from '../slices/userSlice'
 function Header() {
   const { pathname } = useLocation();
   const { currentUser } = useSelector(state => state.user)
@@ -13,6 +18,20 @@ function Header() {
 
   const dispatch = useDispatch()
   const mode = useSelector(state => state.theme.mode)
+  const handleSignOut = async () => {
+    try {
+      dispatch(signOutStart())
+      const res = await fetch('/api/v1/auth/signout', {
+        method: 'POST'
+      })
+      const { message } = await res.json()
+      if (!res.ok)
+        return dispatch(signOutFailure(message))
+      dispatch(signOutSuccess())
+    } catch (error) {
+      dispatch(signOutFailure(error.message))
+    }
+  }
   return (
     <Navbar className='border-b-2'>
       <Logo className='self-center whitespace-nowrap text-sm' />
@@ -39,7 +58,7 @@ function Header() {
           <Link to='/dashboard?tab=profile'>
             <Dropdown.Item>Profile</Dropdown.Item>
             <Dropdown.Divider />
-            <Dropdown.Item>Sign Out</Dropdown.Item>
+            <Dropdown.Item onClick={handleSignOut}>Sign Out</Dropdown.Item>
           </Link>
         </Dropdown>) : (<Link to='/sign-in'>
           <Button gradientDuoTone='purpleToBlue' outline>

@@ -10,6 +10,9 @@ import {
     deleteStart,
     deleteSuccess,
     deleteFailure,
+    signOutStart,
+    signOutSuccess,
+    signOutFailure,
 } from '../slices/userSlice'
 import { useDispatch } from 'react-redux';
 function DashProfile() {
@@ -104,6 +107,20 @@ function DashProfile() {
             dispatch(deleteStart(error.message))
         }
     }
+    const handleSignOut = async () => {
+        try {
+            dispatch(signOutStart())
+            const res = await fetch('/api/v1/auth/signout', {
+                method: 'POST'
+            })
+            const { message } = await res.json()
+            if (!res.ok)
+                return dispatch(signOutFailure(message))
+            dispatch(signOutSuccess())
+        } catch (error) {
+            dispatch(signOutFailure(error.message))
+        }
+    }
     return (
         <div className='max-w-lg mx-auto p-3 w-full'>
             <h1 className='my-7 text-center font-semibold text-3xl'>Profile</h1>
@@ -122,8 +139,8 @@ function DashProfile() {
                     </>) : "Update"}</Button>
             </form>
             <div className="flex justify-between text-red-500 mt-5 cursor-pointer">
-                <span onClick={() => setModal(true)}>Delete Account</span>
-                <span>Sign Out</span>
+                <span onClick={() => setModal(true)} className='cursor-pointer'>Delete Account</span>
+                <span onClick={handleSignOut} className='cursor-pointer'>Sign Out</span>
             </div>
             {
                 alertMessage && <Alert className='mt-5 animate-shake' color={alertColor}>{alertMessage}</Alert>
