@@ -5,7 +5,7 @@ import { GoogleAuthProvider, signInWithPopup, getAuth } from 'firebase/auth'
 import { app } from '../firebase'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { signInSuccess } from '../slices/userSlice'
+import { signInStart, signInSuccess, signInFailure } from '../slices/userSlice'
 function OAuth() {
     const auth = getAuth(app)
     const dispatch = useDispatch()
@@ -14,6 +14,7 @@ function OAuth() {
         const provider = new GoogleAuthProvider()
         provider.setCustomParameters({ prompt: 'select_account' })
         try {
+            dispatch(signInStart())
             const resultsFromGoogle = await signInWithPopup(auth, provider)
             const res = await fetch('/api/v1/auth/googleOAuth', {
                 method: 'Post',
@@ -24,9 +25,12 @@ function OAuth() {
                     googlePhotoUrl: resultsFromGoogle.user.photoURL
                 })
             })
-            const data = await res.json()
+            const { data, message } = await res.json()
+            if (!res.ok)
+                return dispatch(signInFailure(message))
+
             if (res.ok) {
-                dispatch(signInSuccess())
+                dispatch(signInSuccess(data))
                 navigate('/')
             }
 
