@@ -130,3 +130,16 @@ export const GoogleOAuth = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Error while OAuth Google");
   }
 });
+export const SignOut = asyncHandler(async (req, res) => {
+  try {
+    if (!req.cookies?.AccessToken && !req.cookies?.RefreshToken)
+      throw new ApiError(400, "No active session to sign out from");
+    res.clearCookie("AccessToken");
+    res.clearCookie("RefreshToken");
+    return res
+      .status(200)
+      .json(new ApiResponse(200, {}, "Successfully signed out"));
+  } catch (error) {
+    throw new ApiError(500, `Error during sign out: ${error.message}`);
+  }
+});
