@@ -5,4 +5,16 @@ import OAuth from "./OAuth";
 import ThemeProvider from "./ThemeProvider";
 import DashSideBar from "./DashSideBar";
 import DashProfile from "./DashProfile";
-export { Header, Footer, Logo, OAuth, ThemeProvider, DashSideBar, DashProfile };
+import PrivateRoute from "./PrivateRoute";
+import OnlyAdminPrivateRoute from "./OnlyAdminPrivateRoute";
+export {
+  Header,
+  Footer,
+  Logo,
+  OAuth,
+  ThemeProvider,
+  DashSideBar,
+  DashProfile,
+  PrivateRoute,
+  OnlyAdminPrivateRoute,
+};

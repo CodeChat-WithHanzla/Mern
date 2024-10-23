@@ -15,6 +15,7 @@ import {
     signOutFailure,
 } from '../slices/userSlice'
 import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom'
 function DashProfile() {
     const { currentUser, error, loading } = useSelector(state => state.user)
     const [imgUrl, setImgUrl] = useState(null)
@@ -137,6 +138,15 @@ function DashProfile() {
                         <Spinner size='sm' />
                         <span className='pl-3'>Loading...</span>
                     </>) : "Update"}</Button>
+                {
+                    currentUser?.isAdmin && (
+                        <Link to='/create-posts'>
+                            <Button type='button' gradientDuoTone='purpleToPink' className='w-full'>
+                                Create a post
+                            </Button>
+                        </Link>
+                    )
+                }
             </form>
             <div className="flex justify-between text-red-500 mt-5 cursor-pointer">
                 <span onClick={() => setModal(true)} className='cursor-pointer'>Delete Account</span>
