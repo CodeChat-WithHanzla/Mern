@@ -17,6 +17,7 @@ import {
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom'
 import { CircularProgressbar } from 'react-circular-progressbar';
+import { HiCamera } from 'react-icons/hi'
 function DashProfile() {
     const [uploadProgress, setUploadProgress] = useState(0);
     const [Imgloading, setImgLoading] = useState(false);
@@ -28,6 +29,7 @@ function DashProfile() {
     const [alertMessage, setAlertMessage] = useState(null);
     const [alertColor, setAlertColor] = useState('success');
     const [modal, setModal] = useState(false)
+    const [previewModal, setPreviewModal] = useState(false);
     const handleChange = (e) => {
         const { id, value, files } = e.target
 
@@ -141,13 +143,16 @@ function DashProfile() {
             dispatch(signOutFailure(error.message))
         }
     }
+    const handleImageClick = () => {
+        setPreviewModal(true);
+    };
     return (
-        <div className='max-w-lg mx-auto p-3 w-full'>
+        <div className='max-w-lg mx-auto p-3 w-full' onClick={() => (previewModal && setPreviewModal(false))}>
             <h1 className='my-7 text-center font-semibold text-3xl'>Profile</h1>
             <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
                 <input type="file" accept='image/*' onChange={handleChange} ref={filePickerRef} hidden />
-                <div className="w-32 h-32 self-center cursor-pointer shadow-md overflow-hidden rounded-full relative" onClick={() => filePickerRef.current.click()}>
-                    <img src={imgUrl || currentUser?.ProfilePicture} alt="user" className={`rounded-full w-full h-full border-8 border-[lightgray] object-cover `} />
+                <div className="w-32 h-32 self-center cursor-pointer shadow-md overflow-hidden rounded-full relative">
+                    <img src={imgUrl || currentUser?.ProfilePicture} alt="user" className={`rounded-full w-full h-full border-8 border-[lightgray] object-cover `} onClick={handleImageClick} />
                     {Imgloading && (
                         <div className="absolute inset-0 flex justify-center items-center">
                             <div className="w-full h-full">
@@ -155,6 +160,9 @@ function DashProfile() {
                             </div>
                         </div>
                     )}
+                    <div className="absolute bottom-3 right-4 bg-white rounded-full p-1 shadow-md">
+                        <HiCamera className="h-6 w-6 text-gray-500 cursor-pointer" onClick={() => filePickerRef.current.click()} />
+                    </div>
                 </div>
                 <TextInput type='text' id='username' placeholder='username' defaultValue={currentUser?.username} onChange={handleChange} />
                 <TextInput type='email' id='email' placeholder='email' defaultValue={currentUser?.email} onChange={handleChange} />
@@ -191,6 +199,14 @@ function DashProfile() {
                             <Button color='failure' onClick={handleDeleteUser}>Yes I'm sure</Button>
                             <Button color='gray' onClick={() => setModal(false)}>No,cancel</Button>
                         </div>
+                    </div>
+                </Modal.Body>
+            </Modal>
+            <Modal show={previewModal} onClose={() => setPreviewModal(false)} popup size='md'>
+                <Modal.Header />
+                <Modal.Body>
+                    <div className="text-center">
+                        <img src={imgUrl || currentUser?.ProfilePicture} alt="Preview" className="rounded-lg w-full h-auto" />
                     </div>
                 </Modal.Body>
             </Modal>
