@@ -1,3 +1,4 @@
 import authRouter from "./auth.routes.js";
 import userRouter from "./users.routers.js";
-export { authRouter, userRouter };
+import postRouter from "./post.routes.js";
+export { authRouter, userRouter, postRouter };
