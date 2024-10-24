@@ -16,7 +16,10 @@ import {
 } from '../slices/userSlice'
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom'
+import { CircularProgressbar } from 'react-circular-progressbar';
 function DashProfile() {
+    const [uploadProgress, setUploadProgress] = useState(0);
+    const [Imgloading, setImgLoading] = useState(false);
     const { currentUser, error, loading } = useSelector(state => state.user)
     const [imgUrl, setImgUrl] = useState(null)
     const [formData, setFormData] = useState({})
@@ -39,10 +42,26 @@ function DashProfile() {
             }
             reader.readAsDataURL(file)
             setFormData((prevData) => ({ ...prevData, ProfilePicture: file }))
+            simulateUploadProgress();
         }
         else
             setFormData((prevData) => ({ ...prevData, [id]: typeof value === 'string' ? value.trim() : value, }))
     }
+    const simulateUploadProgress = () => {
+        setImgLoading(true);
+        setUploadProgress(0);
+        let progress = 0;
+        const interval = setInterval(() => {
+            progress += 10;
+            if (progress <= 100) {
+                setUploadProgress(progress);
+            } else {
+                clearInterval(interval);
+                setImgLoading(false);
+            }
+        }, 100);
+
+    };
     const handleSubmit = async (e) => {
         e.preventDefault()
         if (Object.keys(formData).length === 0) {
@@ -129,6 +148,13 @@ function DashProfile() {
                 <input type="file" accept='image/*' onChange={handleChange} ref={filePickerRef} hidden />
                 <div className="w-32 h-32 self-center cursor-pointer shadow-md overflow-hidden rounded-full relative" onClick={() => filePickerRef.current.click()}>
                     <img src={imgUrl || currentUser?.ProfilePicture} alt="user" className={`rounded-full w-full h-full border-8 border-[lightgray] object-cover `} />
+                    {Imgloading && (
+                        <div className="absolute inset-0 flex justify-center items-center">
+                            <div className="w-full h-full">
+                                <CircularProgressbar value={uploadProgress} text={`${uploadProgress}%`} />
+                            </div>
+                        </div>
+                    )}
                 </div>
                 <TextInput type='text' id='username' placeholder='username' defaultValue={currentUser?.username} onChange={handleChange} />
                 <TextInput type='email' id='email' placeholder='email' defaultValue={currentUser?.email} onChange={handleChange} />
