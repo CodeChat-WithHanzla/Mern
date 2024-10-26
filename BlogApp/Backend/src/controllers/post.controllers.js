@@ -11,9 +11,9 @@ export const createPosts = asyncHandler(async (req, res) => {
   if (!req.body.title || !req.body.content)
     throw new ApiError(400, "Please provide all required fields");
   const coverImage_localPath = req.file?.path;
-  if (!coverImage_localPath)
-    throw new ApiError(500, "Error while uploading to cloudinary");
-  const coverImage = await uploadOnCloudinary(coverImage_localPath);
+  let coverImage;
+  if (coverImage_localPath)
+    coverImage = await uploadOnCloudinary(coverImage_localPath);
   const slug = req.body.title
     .split(" ")
     .join("-")
@@ -28,6 +28,9 @@ export const createPosts = asyncHandler(async (req, res) => {
     });
     res.status(201).json(new ApiResponse(201, newPost));
   } catch (error) {
-    throw new ApiError(400, "Error Occur while creating a post");
+    if (error.code === 11000) {
+      throw new ApiError(400, "A post with this title already exists.");
+    }
+    throw new ApiError(400, "Error occurred while creating a post");
   }
 });
