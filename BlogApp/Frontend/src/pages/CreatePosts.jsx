@@ -1,16 +1,19 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button, FileInput, Select, TextInput } from 'flowbite-react'
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { CircularProgressbar } from "react-circular-progressbar";
 import { Alert } from 'flowbite-react'
+import { useNavigate } from 'react-router-dom'
 function CreatePosts() {
     const [ImgFile, setImgFile] = useState(null)
     const [imgHidden, setImgHidden] = useState(true)
     const [uploadProgress, setUploadProgress] = useState(0);
     const [Imgloading, setImgLoading] = useState(false);
     const [error, setError] = useState(null)
+    const [originalFile, setOriginalFile] = useState(null)
     const [formData, setFormData] = useState({})
+    const navigate = useNavigate()
     const handleImgChange = (e) => {
         setError(null)
         setImgLoading(false)
@@ -18,6 +21,7 @@ function CreatePosts() {
         const file = e.target?.files?.[0]
         if (!file.type.startsWith('image/'))
             return setError('Invalid file type. Please upload an image.');
+        setOriginalFile(file)
         const reader = new FileReader()
         reader.readAsDataURL(file)
         reader.onload = (e) => {
@@ -31,7 +35,7 @@ function CreatePosts() {
             return setError('Invalid file type. Please upload an image.');
         setImgLoading(true);
         simulateUploadProgress()
-        setFormData({ ...formData, coverImage: ImgFile })
+        setFormData({ ...formData, coverImage: originalFile })
     }
     const simulateUploadProgress = () => {
         setUploadProgress(0);
@@ -47,13 +51,46 @@ function CreatePosts() {
             }
         }, 100);
     }
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        setError(null)
+        const payload = new FormData()
+        Object.entries(formData).forEach(([key, value]) => {
+            payload.append(key, value)
+        })
+        try {
+            const res = await fetch('/api/v1/posts/create-posts', {
+                method: 'POST',
+                body: payload
+            })
+            if (!res.ok) {
+                const { message } = await res.json()
+                setError(message)
+                return;
+            }
+            const { data } = await res.json()
+            console.log(data.slug);
+
+            navigate(`/posts/${data.slug}`)
+        } catch (error) {
+            setError("Something went wrong")
+        }
+    }
+    useEffect(() => {
+        if (error) {
+            const timer = setTimeout(() => {
+                setError(null)
+            }, 10000);
+            return () => clearTimeout(timer);
+        }
+    }, [error])
     return (
         <div className='p-3 max-w-3xl mx-auto min-h-screen'>
             <h1 className='text-center text-3xl my-7 font-semibold'>Create a posts</h1>
-            <form className='flex flex-col gap-4'>
+            <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
                 <div className="flex flex-col gap-4 sm:flex-row justify-between">
-                    <TextInput type='text' placeholder='Title' required id='title' className='flex-1' />
-                    <Select>
+                    <TextInput type='text' placeholder='Title' required id='title' className='flex-1' onChange={(e) => setFormData({ ...formData, title: e.target.value })} />
+                    <Select onChange={(e) => setFormData({ ...formData, category: e.target.value })}>
                         <option value='uncategorized'>Select a category</option>
                         <option value='DevOps'>DevOps</option>
                         <option value='AI'>AI</option>
@@ -86,10 +123,10 @@ function CreatePosts() {
                         )}
 
                 </div>
-                {error && <Alert color='failure'>{error}</Alert>}
                 {ImgFile && <img src={ImgFile} alt="uploaded Image" className="w-full h-72 object-cover" hidden={imgHidden} />}
-                <ReactQuill theme='snow' placeholder='Write your blog post here.' className='h-72 mb-12' required />
-                <Button className='submit' gradientDuoTone='purpleToPink'>Publish</Button>
+                <ReactQuill onChange={(value) => { setFormData({ ...formData, content: value }) }} theme='snow' placeholder='Write your blog post here.' className='h-72 mb-12' required />
+                <Button type='submit' gradientDuoTone='purpleToPink'>Publish</Button>
+                {error && <Alert className='mt-5 animate-shake' color='failure'>{error}</Alert>}
             </form>
         </div>
     )
