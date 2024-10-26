@@ -7,6 +7,7 @@ import DashSideBar from "./DashSideBar";
 import DashProfile from "./DashProfile";
 import PrivateRoute from "./PrivateRoute";
 import OnlyAdminPrivateRoute from "./OnlyAdminPrivateRoute";
+import DashPosts from "./DashPosts";
 export {
   Header,
   Footer,
@@ -17,4 +18,5 @@ export {
   DashProfile,
   PrivateRoute,
   OnlyAdminPrivateRoute,
+  DashPosts,
 };
