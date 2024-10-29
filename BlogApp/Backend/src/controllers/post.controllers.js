@@ -80,3 +80,13 @@ export const getPosts = asyncHandler(async (req, res) => {
     );
   }
 });
+export const deletePosts = asyncHandler(async (req, res) => {
+  if (!req.user.isAdmin || req.user.id !== req.params.userId)
+    throw new ApiError(403, "You are not allowed to delete this post");
+  try {
+    await Post.findByIdAndDelete(req.params.postId);
+    res.status(200).json("The post has been deleted");
+  } catch (error) {
+    new ApiError(500, error.message);
+  }
+});
