@@ -3,6 +3,7 @@ import {
   createPosts,
   getPosts,
   deletePosts,
+  updatePosts,
 } from "../controllers/post.controllers.js";
 import { verifyJWT } from "../middlewares/auth.middlewares.js";
 import { upload } from "../middlewares/multer.middlewares.js";
@@ -18,5 +19,11 @@ postRouter.delete(
   "/posts/delete-posts/:postId/:userId",
   verifyJWT,
   deletePosts
+);
+postRouter.put(
+  "/posts/update-posts/:postId/:userId",
+  upload.single("coverImage"),
+  verifyJWT,
+  updatePosts
 );
 export default postRouter;

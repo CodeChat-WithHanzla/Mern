@@ -90,3 +90,28 @@ export const deletePosts = asyncHandler(async (req, res) => {
     new ApiError(500, error.message);
   }
 });
+export const updatePosts = asyncHandler(async (req, res) => {
+  if (!req.user.isAdmin || req.user?._id.toString() !== req.params.userId)
+    throw new ApiError(403, "You are not allowed to update this post");
+  const coverImage_localPath = req.file?.path;
+  let coverImage;
+  if (coverImage_localPath)
+    coverImage = await uploadOnCloudinary(coverImage_localPath);
+  try {
+    const updatedPost = await Post.findByIdAndUpdate(
+      req.params.postId,
+      {
+        $set: {
+          title: req.body.title,
+          content: req.body.content,
+          category: req.body.category,
+          coverImage: coverImage?.url,
+        },
+      },
+      { new: true }
+    );
+    res.status(200).json(updatedPost);
+  } catch (error) {
+    throw new ApiError(500, error.message);
+  }
+});
