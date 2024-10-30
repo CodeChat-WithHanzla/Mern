@@ -3,9 +3,11 @@ import { Button, FileInput, Select, TextInput } from 'flowbite-react'
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { CircularProgressbar } from "react-circular-progressbar";
-import { Alert } from 'flowbite-react'
+import { Alert, Spinner } from 'flowbite-react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 function UpdatePosts() {
+    const { currentUser } = useSelector(state => state.user)
     const [ImgFile, setImgFile] = useState(null)
     const [imgHidden, setImgHidden] = useState(true)
     const [uploadProgress, setUploadProgress] = useState(0);
@@ -13,6 +15,7 @@ function UpdatePosts() {
     const [error, setError] = useState(null)
     const [originalFile, setOriginalFile] = useState(null)
     const [formData, setFormData] = useState({})
+    const [buttonDisabled, setButtonDisabled] = useState(false)
     const navigate = useNavigate()
     const { postId } = useParams()
     useEffect(() => {
@@ -78,26 +81,26 @@ function UpdatePosts() {
     const handleSubmit = async (e) => {
         e.preventDefault()
         setError(null)
+        setButtonDisabled(true)
         const payload = new FormData()
         Object.entries(formData).forEach(([key, value]) => {
             payload.append(key, value)
         })
         try {
-            const res = await fetch('/api/v1/posts/create-posts', {
-                method: 'POST',
+            const res = await fetch(`/api/v1/posts/update-posts/${formData._id}/${currentUser._id}`, {
+                method: 'PUT',
                 body: payload
             })
             if (!res.ok) {
                 const { message } = await res.json()
                 setError(message)
+                setButtonDisabled(false)
                 return;
             }
-            const { data } = await res.json()
-            console.log(data.slug);
-
+            const data = await res.json()
             navigate(`/posts/${data.slug}`)
         } catch (error) {
-            setError("Something went wrong")
+            setError(error.message)
         }
     }
     useEffect(() => {
@@ -149,7 +152,11 @@ function UpdatePosts() {
                 </div>
                 {ImgFile && !imgHidden && <img src={ImgFile} alt="uploaded Image" className="w-full h-72 object-cover" hidden={imgHidden} />}
                 <ReactQuill value={formData.content || ''} onChange={(value) => { setFormData({ ...formData, content: value }) }} theme='snow' placeholder='Write your blog post here.' className='h-72 mb-12' required />
-                <Button type='submit' gradientDuoTone='purpleToPink'>Update Post</Button>
+                <Button type='submit' gradientDuoTone='purpleToPink' disabled={buttonDisabled}>{buttonDisabled ? (
+                    <>
+                        <Spinner size='sm' />
+                        <span className='pl-3'>Updating...</span>
+                    </>) : "Update Post"}</Button>
                 {error && <Alert className='mt-5 animate-shake' color='failure'>{error}</Alert>}
             </form>
         </div>
