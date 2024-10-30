@@ -70,3 +70,42 @@ export const deleteUser = asyncHandler(async (req, res) => {
       )
     );
 });
+export const getUsers = asyncHandler(async (req, res) => {
+  try {
+    if (!req.user.isAdmin)
+      throw new ApiError(403, "You are not allowed to see all users");
+    const filters = {};
+    const startIndex = parseInt(req.query.startIndex) || 0;
+    const limit = parseInt(req.query.limit) || 9;
+    const sortDirection = req.query.sort === "asc" ? 1 : -1;
+    if (startIndex) filters.startIndex = startIndex;
+    if (limit) filters.limit = limit;
+    if (sortDirection) filters.sortDirection = sortDirection;
+    const users = await User.find()
+      .sort({ createdAt: sortDirection })
+      .skip(startIndex)
+      .limit(limit)
+      .select("-password -refreshToken");
+    const totalUsers = await User.countDocuments();
+    const now = new Date();
+    const oneMonthAgo = new Date(
+      now.getFullYear(),
+      now.getMonth() - 1,
+      now.getDate()
+    );
+    const lastMonthUsers = await User.countDocuments({
+      createdAt: { $gte: oneMonthAgo },
+    });
+    res
+      .status(200)
+      .json(
+        new ApiResponse(
+          200,
+          { users, totalUsers, lastMonthUsers },
+          "Users successfully retrieved."
+        )
+      );
+  } catch (error) {
+    throw new ApiError(500, error.message);
+  }
+});

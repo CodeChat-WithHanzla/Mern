@@ -1,5 +1,9 @@
 import { Router } from "express";
-import { updateUser, deleteUser } from "../controllers/user.controllers.js";
+import {
+  updateUser,
+  deleteUser,
+  getUsers,
+} from "../controllers/user.controllers.js";
 import { verifyJWT } from "../middlewares/auth.middlewares.js";
 import { upload } from "../middlewares/multer.middlewares.js";
 const userRouter = Router();
@@ -10,4 +14,5 @@ userRouter.put(
   updateUser
 );
 userRouter.delete("/delete/:userId", verifyJWT, deleteUser);
+userRouter.get("/getUsers", verifyJWT, getUsers);
 export default userRouter;
