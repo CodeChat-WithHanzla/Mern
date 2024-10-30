@@ -1,5 +1,5 @@
 import React from 'react'
-import { About, Dashboard, Home, Projects, SignIn, SignUp, CreatePosts } from './pages';
+import { About, Dashboard, Home, Projects, SignIn, SignUp, CreatePosts, UpdatePosts } from './pages';
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Header, Footer, PrivateRoute, OnlyAdminPrivateRoute } from './components';
 function App() {
@@ -14,6 +14,7 @@ function App() {
         </Route>
         <Route element={<OnlyAdminPrivateRoute />}>
           <Route path='/create-posts' element={<CreatePosts />} />
+          <Route path='/update-posts/:postId' element={<UpdatePosts />} />
         </Route>
         <Route path='/projects' element={<Projects />} />
         <Route path='/sign-in' element={<SignIn />} />
