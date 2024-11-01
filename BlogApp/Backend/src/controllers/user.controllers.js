@@ -52,7 +52,7 @@ export const deleteUser = asyncHandler(async (req, res) => {
         new ApiError(400, "A User ID is required to proceed with the deletion")
       );
   }
-  if (req.user._id.toString() !== userId) {
+  if (!req.user.isAdmin && req.user._id.toString() !== userId) {
     return res
       .status(403)
       .json(
