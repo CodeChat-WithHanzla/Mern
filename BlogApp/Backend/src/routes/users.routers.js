@@ -14,5 +14,5 @@ userRouter.put(
   updateUser
 );
 userRouter.delete("/delete/:userId", verifyJWT, deleteUser);
-userRouter.get("/getUsers", verifyJWT, getUsers);
+userRouter.get("/users/getUsers", verifyJWT, getUsers);
 export default userRouter;
