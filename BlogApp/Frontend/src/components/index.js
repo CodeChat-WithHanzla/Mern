@@ -9,6 +9,7 @@ import PrivateRoute from "./PrivateRoute";
 import OnlyAdminPrivateRoute from "./OnlyAdminPrivateRoute";
 import DashPosts from "./DashPosts";
 import DashUsers from "./DashUsers";
+import CallToAction from "./CallToAction";
 export {
   Header,
   Footer,
@@ -21,4 +22,5 @@ export {
   OnlyAdminPrivateRoute,
   DashPosts,
   DashUsers,
+  CallToAction,
 };
