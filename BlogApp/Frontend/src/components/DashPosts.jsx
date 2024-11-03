@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from "react-redux";
-import { Alert, Modal, Button, Table } from 'flowbite-react'
+import { Alert, Modal, Button, Table, Spinner } from 'flowbite-react'
 import { Link } from 'react-router-dom'
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
 import { FaSpinner } from 'react-icons/fa'
@@ -101,12 +101,12 @@ function DashPosts() {
                                     {new Date(post?.updatedAt).toLocaleDateString()}
                                 </Table.Cell>
                                 <Table.Cell>
-                                    <Link to={`posts/${post.slug}`}>
+                                    <Link to={`/posts/${post.slug}`}>
                                         <img src={post.coverImage} alt={post.title} className='w-20 h-10 object-cover bg-gray-500' />
                                     </Link>
                                 </Table.Cell>
                                 <Table.Cell>
-                                    <Link className='font-medium text-gray-900 dark:text-white' to={`posts/${post.slug}`}>{post.title}</Link>
+                                    <Link className='font-medium text-gray-900 dark:text-white' to={`/posts/${post.slug}`}>{post.title}</Link>
                                 </Table.Cell>
                                 <Table.Cell>
                                     {post.category}
@@ -148,7 +148,9 @@ function DashPosts() {
                         </Modal.Body>
                     </Modal>
                 </>
-            ) : <div className='flex justify-center items-center h-full'><FaSpinner className="animate-spin mr-2 md:w-48 md:h-48 w-10 h-10" /></div>}</div>
+            ) : <div className='flex justify-center items-center min-h-screen'>
+                <Spinner size='xl' />
+            </div>}</div>
     )
 }
 

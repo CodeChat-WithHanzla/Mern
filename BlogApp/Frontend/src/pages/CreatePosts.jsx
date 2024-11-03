@@ -99,6 +99,7 @@ function CreatePosts() {
                         <option value='React.js'>React.js</option>
                         <option value='React-Native.js'>React-Native.js</option>
                         <option value='Node.js'>Node.js</option>
+                        <option value='Others'>Others</option>
                     </Select>
                 </div>
                 <div className="flex gap-4 items-center justify-center border-4 border-teal-500 border-dotted p-3">

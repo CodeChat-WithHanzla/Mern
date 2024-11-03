@@ -23,7 +23,7 @@ function UpdatePosts() {
             const fetchPosts = async () => {
                 const res = await fetch(`/api/v1/posts/get-posts?postId=${postId}`)
                 const data = await res.json()
-                console.log(data.posts[0]);
+
 
                 if (!res.ok) {
                     setError(data.message)
@@ -38,7 +38,7 @@ function UpdatePosts() {
             }
             fetchPosts()
         } catch (error) {
-            console.log(error.message);
+            setError(error.message);
         }
     }, [postId])
     const handleImgChange = (e) => {
@@ -87,7 +87,7 @@ function UpdatePosts() {
             payload.append(key, value)
         })
         try {
-            const res = await fetch(`/api/v1/posts/update-posts/${formData._id}/${currentUser._id}`, {
+            const res = await fetch(`/api/v1/posts/update-posts/${postId}/${currentUser._id}`, {
                 method: 'PUT',
                 body: payload
             })
