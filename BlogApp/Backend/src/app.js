@@ -1,5 +1,10 @@
 import express from "express";
-import { authRouter, userRouter, postRouter } from "./routes/index.js";
+import {
+  authRouter,
+  userRouter,
+  postRouter,
+  commentRouter,
+} from "./routes/index.js";
 import cors from "cors";
 import { errorHandler } from "./utils/errorHandler.js";
 import cookieParser from "cookie-parser";
@@ -18,5 +23,6 @@ app.use(cookieParser());
 app.use("/api/v1", authRouter);
 app.use("/api/v1", userRouter);
 app.use("/api/v1", postRouter);
+app.use("/api/v1", commentRouter);
 app.use(errorHandler);
 export default app;
