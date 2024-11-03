@@ -1,12 +1,31 @@
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Link } from "react-router-dom";
-import { Button, Textarea } from "flowbite-react";
+import { Alert, Button, Textarea } from "flowbite-react";
 function CommentsSection({ postId }) {
     const { currentUser } = useSelector(state => state.user)
     const [comment, setComment] = useState("")
+    const [error, setError] = useState(null)
     const handleSubmit = async (e) => {
-    
+        e.preventDefault()
+        if (comment.length > 200)
+            return
+        try {
+            const res = await fetch(`/api/v1/comments/create`, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ content: comment, postId, userId: currentUser?._id })
+            })
+            const data = await res.json()
+            if (res.ok) {
+                setComment('')
+                setError(null)
+            }
+        } catch (error) {
+            setError(error.message)
+        }
     }
     return (
         <div className='max-w-2xl mx-auto w-full p-3'>{currentUser ? (
@@ -32,6 +51,7 @@ function CommentsSection({ postId }) {
                             Submit
                         </Button>
                     </div>
+                    {error && <Alert color='failure' className='mt-5'>{error}</Alert>}
                 </form>)
             }
         </div>
