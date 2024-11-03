@@ -1,7 +1,7 @@
 import { useEffect, useState, } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { Button, Spinner } from 'flowbite-react'
-import { CallToAction } from "../components";
+import { CommentsSection, CallToAction } from "../components";
 function Posts() {
     const { postSlug } = useParams()
     const [isLoading, setIsLoading] = useState(true)
@@ -47,6 +47,7 @@ function Posts() {
             <div className="max-w-4xl mx-auto w-full">
                 <CallToAction />
             </div>
+            <CommentsSection postId={post?._id} />
         </main>
     )
 }

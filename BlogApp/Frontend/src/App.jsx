@@ -1,10 +1,11 @@
 import React from 'react'
 import { About, Dashboard, Home, Projects, SignIn, SignUp, CreatePosts, UpdatePosts, Posts } from './pages';
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { Header, Footer, PrivateRoute, OnlyAdminPrivateRoute } from './components';
+import { ScrollToTop, Header, Footer, PrivateRoute, OnlyAdminPrivateRoute } from './components';
 function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Header />
       <Routes>
         <Route path='/' element={<Home />} />
