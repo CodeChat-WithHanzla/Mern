@@ -109,3 +109,12 @@ export const getUsers = asyncHandler(async (req, res) => {
     throw new ApiError(500, error.message);
   }
 });
+export const getUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.userId).select(
+    "-password -refreshToken"
+  );
+  if (!user) throw new ApiError(404, "User not found");
+  res
+    .status(200)
+    .json(new ApiResponse(200, user, "User retrieved successfully!"));
+});

@@ -7,3 +7,11 @@ export const createComment = asyncHandler(async (req, res) => {
   const newComment = await Comment.create({ content, postId, userId });
   res.status(201).json(new ApiResponse(201, newComment, "Comment created!"));
 });
+export const getComments = asyncHandler(async (req, res) => {
+  const comments = await Comment.find({ postId: req.params.postId }).sort({
+    createdAt: -1,
+  });
+  res
+    .status(200)
+    .json(new ApiResponse(200, comments, "Get the comment successfully"));
+});
