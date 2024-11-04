@@ -15,3 +15,17 @@ export const getComments = asyncHandler(async (req, res) => {
     .status(200)
     .json(new ApiResponse(200, comments, "Get the comment successfully"));
 });
+export const likeComment = asyncHandler(async (req, res) => {
+  const comment = await Comment.findById(req.params.commentId);
+  if (!comment) throw new ApiError(404, "Comment not found");
+  const userIndex = comment.likes.indexOf(req.user._id);
+  if (userIndex == -1) {
+    comment.numberOfLikes += 1;
+    comment.likes.push(req.user._id);
+  } else {
+    comment.numberOfLikes -= 1;
+    comment.likes.splice(userIndex, 1);
+  }
+  await comment.save();
+  res.status(201).json(new ApiResponse(201, comment, "Like or unLike"));
+});
