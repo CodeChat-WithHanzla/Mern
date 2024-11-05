@@ -13,6 +13,7 @@ import CallToAction from "./CallToAction";
 import CommentsSection from "./CommentsSection";
 import ScrollToTop from "./ScrollToTop";
 import Comment from "./Comment";
+import PostCard from "./PostCard";
 export {
   Header,
   Footer,
@@ -29,4 +30,5 @@ export {
   CommentsSection,
   ScrollToTop,
   Comment,
+  PostCard,
 };
