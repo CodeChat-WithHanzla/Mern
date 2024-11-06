@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
-import { DashProfile, DashSideBar, DashPosts, DashUsers } from '../components/index'
+import { DashProfile, DashSideBar, DashPosts, DashUsers, DashComments } from '../components/index'
 function Dashboard() {
   const location = useLocation()
   const [tab, setTab] = useState('')
@@ -22,6 +22,8 @@ function Dashboard() {
       {tab === 'posts' && <DashPosts />}
       {/* Users... */}
       {tab === 'users' && <DashUsers />}
+      {/* Comments... */}
+      {tab === 'comments' && <DashComments />}
     </div>
   )
 }
