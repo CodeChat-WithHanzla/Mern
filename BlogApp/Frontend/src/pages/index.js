@@ -7,6 +7,7 @@ import SignUp from "./SignUp";
 import CreatePosts from "./CreatePosts";
 import UpdatePosts from "./UpdatePosts";
 import Posts from "./Posts";
+import Search from "./Search";
 export {
   About,
   Dashboard,
@@ -17,4 +18,5 @@ export {
   CreatePosts,
   UpdatePosts,
   Posts,
+  Search,
 };

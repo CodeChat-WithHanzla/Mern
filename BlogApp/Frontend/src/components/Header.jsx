@@ -1,6 +1,6 @@
-import React from 'react'
+import { useState, useEffect } from 'react'
 import { Avatar, Button, Dropdown, Navbar, TextInput } from 'flowbite-react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { AiOutlineSearch } from 'react-icons/ai'
 import { FaMoon, FaSun } from 'react-icons/fa'
 import { Logo } from './index'
@@ -12,12 +12,19 @@ import {
   signOutFailure,
 } from '../slices/userSlice'
 function Header() {
-  const { pathname } = useLocation();
+  const { pathname, search } = useLocation();
   const { currentUser } = useSelector(state => state.user)
-  // console.log(currentUser);
-
   const dispatch = useDispatch()
   const mode = useSelector(state => state.theme.mode)
+  const [searchItem, setSearchItem] = useState('')
+  const navigate = useNavigate()
+  useEffect(() => {
+    const urlParams = new URLSearchParams(search)
+    const searchTermFromUrl = urlParams.get('searchItem')
+    if (searchTermFromUrl)
+      setSearchItem(searchTermFromUrl)
+  }, [search])
+
   const handleSignOut = async () => {
     try {
       dispatch(signOutStart())
@@ -32,15 +39,24 @@ function Header() {
       dispatch(signOutFailure(error.message))
     }
   }
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    const urlParams = new URLSearchParams(search)
+    urlParams.set('searchItem', searchItem)
+    const searchQuery = urlParams.toString()
+    navigate(`/search?${searchQuery}`)
+  }
   return (
     <Navbar className='border-b-2'>
       <Logo className='self-center whitespace-nowrap text-sm' />
-      <form>
+      <form onSubmit={handleSubmit}>
         <TextInput
           type='text'
           placeholder='Search...'
           rightIcon={AiOutlineSearch}
           className='hidden lg:inline'
+          value={searchItem}
+          onChange={(e) => setSearchItem(e.target.value)}
         />
       </form>
       <Button className='w-12 h-10 lg:hidden' color='gray' pill>
