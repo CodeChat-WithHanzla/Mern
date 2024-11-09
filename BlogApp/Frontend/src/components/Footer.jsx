@@ -1,7 +1,7 @@
 import { Footer } from 'flowbite-react';
 import { Link } from 'react-router-dom';
 import { Logo } from './index'
-import { BsFacebook, BsInstagram, BsTwitter, BsGithub, BsDribbble } from 'react-icons/bs';
+import { BsInstagram, BsGithub } from 'react-icons/bs';
 export default function FooterCom() {
     return (
         <Footer container className='border border-t-8 border-teal-500'>
@@ -34,34 +34,25 @@ export default function FooterCom() {
                             <Footer.Title title='Follow us' />
                             <Footer.LinkGroup col>
                                 <Footer.Link
-                                    href='https://github.com/CodeChat-WithHanzla/'
+                                    href='https://www.instagram.com/codechatwithhanzla/'
                                     target='_blank'
                                     rel='noopener noreferrer'
                                 >
-                                    Github
+                                    Instagram
                                 </Footer.Link>
-                                <Footer.Link href='#'>Discord</Footer.Link>
-                            </Footer.LinkGroup>
-                        </div>
-                        <div>
-                            <Footer.Title title='Legal' />
-                            <Footer.LinkGroup col>
-                                <Footer.Link href='#'>Privacy Policy</Footer.Link>
-                                <Footer.Link href='#'>Terms &amp; Conditions</Footer.Link>
                             </Footer.LinkGroup>
                         </div>
                     </div>
                 </div>
-                <Footer.Divider/>
+                <Footer.Divider />
                 <div className="w-full sm:flex sm:items-center sm:justify-between">
                     <Footer.Copyright href='#' by="Hanzla's Blog" year={new Date().getFullYear()} />
 
                     <div className="flex gap-6 sm:mt-0 mt4 sm:justify-center mt-3">
-                        <Footer.Icon href='#' icon={BsFacebook} />
-                        <Footer.Icon href='#' icon={BsFacebook} />
-                        <Footer.Icon href='#' icon={BsFacebook} />
-                        <Footer.Icon href='#' icon={BsFacebook} />
-                        <Footer.Icon href='#' icon={BsFacebook} />
+                        <Footer.Icon href='https://www.instagram.com/codechatwithhanzla/' icon={BsInstagram} target='_blank'
+                            rel='noopener noreferrer' />
+                        <Footer.Icon href='https://github.com/CodeChat-WithHanzla' icon={BsGithub} target='_blank'
+                            rel='noopener noreferrer' />
                     </div>
                 </div>
             </div>
