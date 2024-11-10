@@ -15,7 +15,7 @@ import ScrollToTop from "./ScrollToTop";
 import Comment from "./Comment";
 import PostCard from "./PostCard";
 import DashComments from "./DashComments";
-import DashboardComp from "./DashboardCOmp";
+import DashboardComp from "./DashboardComp";
 export {
   Header,
   Footer,
