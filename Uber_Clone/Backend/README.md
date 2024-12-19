@@ -113,3 +113,47 @@ This endpoint allows users to login by providing their email and password. Upon 
   "msg": "Incorrect password"
 }
 ```
+
+## Profile API
+
+### GET users/profile
+
+### Request Format:
+
+- **Headers:**
+  - `Authorization`: `Bearer <JWT_TOKEN>` (optional, if token is not stored in cookies)
+- **Cookies:**
+  - `token`: `<JWT_TOKEN>` (optional, if token is not passed in headers)
+
+### Response Format:
+
+- **Missing Token:**
+
+  ```json
+  {
+    "msg": "Unauthorized"
+  }
+  ```
+
+- **Invalid Token:**
+  ```json
+  {
+    "msg": "Unauthorized"
+  }
+  ```
+
+---
+
+### Response Format:
+
+- **Successful Response:**
+  ```json
+  {
+    "_id": "<user-id>",
+    "name": "string",
+    "email": "string",
+    ...other user fields
+  }
+  ```
+
+---

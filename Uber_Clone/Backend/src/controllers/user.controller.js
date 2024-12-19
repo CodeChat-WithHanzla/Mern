@@ -39,5 +39,9 @@ export const loginUser = async (req, res, next) => {
   const isMatch = await user.comparePasswords(password);
   if (!isMatch) return res.status(401).json({ msg: "Incorrect password" });
   const token = await user.generateAuthToken();
+  res.cookie("token", token);
   res.status(200).json({ token, user });
+};
+export const getUserProfile = async (req, res, next) => {
+  return res.status(200).json(req.user);
 };
