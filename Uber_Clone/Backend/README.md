@@ -157,3 +157,32 @@ This endpoint allows users to login by providing their email and password. Upon 
   ```
 
 ---
+
+## Logout API
+
+### GET users/logout
+
+This endpoint allows users to logout by invalidating their current session token.
+
+### Request Format:
+
+- **Headers:**
+  - `Authorization`: `Bearer <token>`
+- **Cookie:**
+  - `token`: `<token>`
+
+### Response (200 - OK)
+
+```json
+{
+  "msg": "Logged out"
+}
+```
+
+### Response (401 - Unauthorized)
+
+```json
+{
+  "msg": "Unauthorized"
+}
+```

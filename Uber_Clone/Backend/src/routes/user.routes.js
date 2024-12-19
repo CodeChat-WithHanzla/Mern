@@ -4,6 +4,7 @@ import {
   registerUser,
   loginUser,
   getUserProfile,
+  logoutUser,
 } from "../controllers/user.controller.js";
 import { authUser } from "../../middlewares/authUser.middlewares.js";
 const routes = Router();
@@ -31,4 +32,5 @@ routes.post(
   loginUser
 );
 routes.get("/profile", authUser, getUserProfile);
+routes.get("/logout", authUser, logoutUser);
 export default routes;
