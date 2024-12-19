@@ -41,7 +41,8 @@ This endpoint allows users to register by providing their email, first name, las
       "lastName": "string"
     },
     "email": "string",
-    "password": "string"
+    "password": "string",
+    "__v": 0
   }
 }
 ```
@@ -57,5 +58,58 @@ This endpoint allows users to register by providing their email, first name, las
       "location": "body"
     }
   ]
+}
+```
+
+## Login API
+
+### POST users/login
+
+This endpoint allows users to login by providing their email and password. Upon successful login, a JWT token is generated and returned along with the user's data.
+
+### Request Conditions
+
+- The email address must be registered, and both the email and password are required. Additionally, the provided credentials must be accurate.
+
+### Request Body
+
+```json
+{
+  "email": "string",
+  "password": "string"
+}
+```
+
+### Response (200 - Successful )
+
+```json
+{
+  "token": "string",
+  "user": {
+    "_id": "string",
+    "fullName": {
+      "firstName": "string",
+      "lastName": "string"
+    },
+    "email": "string",
+    "password": "string",
+    "__v": 0
+  }
+}
+```
+
+### Response (404 - Not Found)
+
+```json
+{
+  "msg": "The user associated with this email does not exist."
+}
+```
+
+### Response (401 - Unauthorized)
+
+```json
+{
+  "msg": "Incorrect password"
 }
 ```
