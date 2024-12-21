@@ -253,3 +253,78 @@ This endpoint allows captains to register by providing their email, first name, 
   ]
 }
 ```
+## Captain Profile API
+
+### GET captains/profile
+
+### Request Format:
+
+- **Headers:**
+  - `Authorization`: `Bearer <JWT_TOKEN>` (optional, if token is not stored in cookies)
+- **Cookies:**
+  - `token`: `<JWT_TOKEN>` (optional, if token is not passed in headers)
+
+### Response Format:
+
+- **Missing Token:**
+
+  ```json
+  {
+    "msg": "Unauthorized"
+  }
+  ```
+
+- **Invalid Token:**
+  ```json
+  {
+    "msg": "Unauthorized"
+  }
+  ```
+
+- **Successful Response:**
+  ```json
+  {
+    "_id": "<captain-id>",
+    "fullName": {
+      "firstName": "string",
+      "lastName": "string"
+    },
+    "email": "string",
+    "vehicle": {
+      "color": "string",
+      "plate": "string",
+      "capacity": "number",
+      "vehicleType": "string"
+    },
+    ...other captain fields
+  }
+  ```
+
+## Captain Logout API
+
+### GET captains/logout
+
+This endpoint allows captains to logout by invalidating their current session token.
+
+### Request Format:
+
+- **Headers:**
+  - `Authorization`: `Bearer <token>`
+- **Cookie:**
+  - `token`: `<token>`
+
+### Response (200 - OK)
+
+```json
+{
+  "msg": "Logged out"
+}
+```
+
+### Response (401 - Unauthorized)
+
+```json
+{
+  "msg": "Unauthorized"
+}
+```
