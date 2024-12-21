@@ -185,6 +185,7 @@ This endpoint allows users to logout by invalidating their current session token
 {
   "msg": "Unauthorized"
 }
+````
 ## Captain Registration API
 
 ### POST captains/register
