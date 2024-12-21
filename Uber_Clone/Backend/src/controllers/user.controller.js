@@ -11,11 +11,9 @@ export const registerUser = async (req, res, next) => {
   }
   const { fullName, email, password } = req.body;
   const existedUser = await userModel.findOne({
-    "fullName.firstName": fullName.firstName,
+    $or: [{ "fullName.firstName": fullName.firstName }, { email }],
   });
-  const existedEmail = await userModel.findOne({ email });
-
-  if (existedUser || existedEmail) {
+  if (existedUser) {
     return res.status(400).json({ msg: "User with this email or name exists" });
   }
   const hashPassword = await userModel.hashPasswords(password);

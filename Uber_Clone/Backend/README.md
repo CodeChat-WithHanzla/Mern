@@ -181,8 +181,74 @@ This endpoint allows users to logout by invalidating their current session token
 
 ### Response (401 - Unauthorized)
 
-```json
+````json
 {
   "msg": "Unauthorized"
+}
+## Captain Registration API
+
+### POST captains/register
+
+This endpoint allows captains to register by providing their email, first name, last name, password, and vehicle details. Upon successful registration, a JWT token is generated and returned along with the captain's data.
+
+### Request Conditions
+
+- The firstName and email must be unique.
+- The firstName must be at least 3 characters long.
+- The password must be at least 6 characters long.
+- The vehicle's plate must be unique.
+
+### Request Body
+
+```json
+{
+  "fullName": {
+    "firstName": "string",
+    "lastName": "string"
+  },
+  "email": "string",
+  "password": "string",
+  "vehicle": {
+    "color": "string",
+    "plate": "string",
+    "capacity": "number",
+    "vehicleType": "string"
+  }
+}
+````
+
+### Response (201 - Created)
+
+```json
+{
+  "token": "string",
+  "captain": {
+    "_id": "string",
+    "fullName": {
+      "firstName": "string",
+      "lastName": "string"
+    },
+    "email": "string",
+    "password": "string",
+    "vehicle": {
+      "color": "string",
+      "plate": "string",
+      "capacity": "number",
+      "vehicleType": "string"
+    },
+    "__v": 0
+  }
+}
+```
+
+### Response (400 - Bad Request)
+
+```json
+{
+  "error": [
+    {
+      "msg": "Error message"
+    }
+  ]
 }
 ```
