@@ -21,11 +21,9 @@ function CaptainContext({ children }) {
 
     })
     return (
-        <div>
-            <CaptainDataContext.Provider value={[captainData, setCaptainData]}>
-                {children}
-            </CaptainDataContext.Provider>
-        </div>
+        <CaptainDataContext.Provider value={{ captainData, setCaptainData }}>
+            {children}
+        </CaptainDataContext.Provider>
     )
 }
 

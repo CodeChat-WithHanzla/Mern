@@ -1,21 +1,71 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { Link } from 'react-router-dom'
-
+import { CaptainDataContext } from '../context/CaptainContext'
+import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
+import Notification from '../components/Notification';
 
 function CaptainSignup() {
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [captainData, setCaptainData] = useState({})
+  const [vehicleColor, setVehicleColor] = useState('')
+  const [vehiclePlate, setVehiclePlate] = useState('')
+  const [vehicleCapacity, setVehicleCapacity] = useState('')
+  const [vehicleType, setVehicleType] = useState('')
+  const { setCaptainData } = useContext(CaptainDataContext)
+  const [notification, setNotification] = useState(null);
+  const navigate = useNavigate()
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    setCaptainData({ email, password })
+    try {
+      const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/captains/register`, {
+        fullName: {
+          firstName,
+          lastName
+        },
+        email,
+        password,
+        vehicle: {
+          color: vehicleColor,
+          plate: vehiclePlate,
+          capacity: vehicleCapacity,
+          vehicleType
+        }
+      })
+      if (res.status === 201) {
+        setCaptainData(res.data.captain)
+        localStorage.setItem('token', res.data.token)
+        navigate('/captain-home')
+      }
+    } catch (error) {
+      if (error.response) {
+        const errorMessage = error.response.data.msg || 'Something went wrong';
+        setNotification({
+          message: errorMessage,
+          type: 'error',
+        });
+      } else {
+        setNotification({
+          message: 'Network error. Please try again.',
+          type: 'error',
+        });
+      }
+    }
+    setFirstName('')
+    setLastName('')
     setEmail('')
     setPassword('')
+    setVehicleColor('')
+    setVehiclePlate('')
+    setVehicleCapacity('')
+    setVehicleType('')
   }
   return (
     <div
-      className='p-7 min-h-screen bg-cover bg-center bg-[url("https://drz0f01yeq1cx.cloudfront.net/1734810843355-94139344375421121167851268302467811664.png")]'
+      className='p-7 min-h-screen bg-cover  bg-[url("https://res.cloudinary.com/dwlbprnr5/image/upload/v1734954670/bf031336-b0ba-4205-996d-d4739965953e_3_rwhwuc.webp")]'
     >
       <div className="">
         <img src="https://freelogopng.com/images/all_img/1659768779uber-logo-white.png" alt="Uber Logo" className='w-24 mb-10' />
@@ -28,6 +78,8 @@ function CaptainSignup() {
               placeholder='First Name'
               className='bg-[#eeeeee] rounded px-2 py-2 border w-1/2 text-lg placeholder:text-base'
               spellCheck='false'
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
             />
             <input
               type="text"
@@ -35,6 +87,8 @@ function CaptainSignup() {
               placeholder='Last Name'
               className='bg-[#eeeeee] rounded px-2 py-2 border w-1/2 text-lg placeholder:text-base'
               spellCheck='false'
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
             />
           </div>
           <h3 className='text-lg font-medium mb-2'>What's your email</h3>
@@ -56,8 +110,57 @@ function CaptainSignup() {
             placeholder='*********'
             className='bg-[#eeeeee] mb-5 rounded px-2 py-2 border w-full text-lg placeholder:text-base text-gray-900'
           />
-          <button className='bg-[#111] text-white font-semibold mb-5 rounded px-2 py-2 w-full text-lg' type='submit'>Sign Up</button>
+          <h3 className='text-lg font-medium mb-2'>Vehicle Color</h3>
+          <input
+            type="text"
+            value={vehicleColor}
+            onChange={(e) => setVehicleColor(e.target.value)}
+            required
+            placeholder='Vehicle Color'
+            className='bg-[#eeeeee] mb-5 rounded px-2 py-2 border w-full text-lg placeholder:text-base text-gray-900'
+            spellCheck='false'
+          />
+          <h3 className='text-lg font-medium mb-2'>Vehicle Plate</h3>
+          <input
+            type="text"
+            value={vehiclePlate}
+            onChange={(e) => setVehiclePlate(e.target.value)}
+            required
+            placeholder='Vehicle Plate'
+            className='bg-[#eeeeee] mb-5 rounded px-2 py-2 border w-full text-lg placeholder:text-base text-gray-900'
+            spellCheck='false'
+          />
+          <h3 className='text-lg font-medium mb-2'>Vehicle Capacity</h3>
+          <input
+            type="number"
+            value={vehicleCapacity}
+            onChange={(e) => setVehicleCapacity(e.target.value)}
+            required
+            placeholder='Vehicle Capacity'
+            className='bg-[#eeeeee] mb-5 rounded px-2 py-2 border w-full text-lg placeholder:text-base text-gray-900'
+            spellCheck='false'
+          />
+          <h3 className='text-lg font-medium mb-2'>Vehicle Type</h3>
+          <select
+            value={vehicleType}
+            onChange={(e) => setVehicleType(e.target.value)}
+            required
+            className='bg-[#eeeeee] mb-5 rounded px-2 py-2 border w-full text-lg placeholder:text-base text-gray-900'
+          >
+            <option value="" disabled>Select Vehicle Type</option>
+            <option value="car">Car</option>
+            <option value="bike">Bike</option>
+            <option value="auto">Auto</option>
+          </select>
+          <button className='bg-[#111] text-white font-semibold mb-5 rounded px-2 py-2 w-full text-lg' type='submit'>Create Captain Account</button>
         </form>
+        {notification && (
+          <Notification
+            message={notification.message}
+            type={notification.type}
+            onClose={() => setNotification(null)}
+          />
+        )}
       </div>
       <div className="mt-60">
         <div className="text-white font-bold text-center mb-3">

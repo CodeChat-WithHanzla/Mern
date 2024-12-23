@@ -1,14 +1,42 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import { Link } from 'react-router-dom'
+import axios from 'axios'
+import { CaptainDataContext } from '../context/CaptainContext'
+import { useNavigate } from 'react-router-dom'
+import Notification from '../components/Notification';
 
 function CaptainLogin() {
+  const navigate = useNavigate()
+  const [notification, setNotification] = useState(null);
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [userData, setUserData] = useState({})
-
-  const handleSubmit = (e) => {
+  const { setCaptainData } = useContext(CaptainDataContext)
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    setUserData({ email, password })
+    try {
+      const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/captains/login`, {
+        email,
+        password
+      })
+      if (res.status === 200) {
+        setCaptainData(res.data.captain)
+        localStorage.setItem('token', res.data.token)
+        navigate('/captain-home')
+      }
+    } catch (error) {
+      if (error.response) {
+        const errorMessage = error.response.data.msg || 'Something went wrong';
+        setNotification({
+          message: errorMessage,
+          type: 'error',
+        });
+      } else {
+        setNotification({
+          message: 'Network error. Please try again.',
+          type: 'error',
+        });
+      }
+    }
     setEmail('')
     setPassword('')
   }
@@ -41,6 +69,13 @@ function CaptainLogin() {
           />
           <button className='bg-[#111] text-white font-semibold mb-7 rounded px-2 py-2 w-full text-lg' type='submit'>Login</button>
         </form>
+        {notification && (
+          <Notification
+            message={notification.message}
+            type={notification.type}
+            onClose={() => setNotification(null)}
+          />
+        )}
       </div>
       <div className="mt-72">
         <div className="text-white font-bold text-center mb-3">
