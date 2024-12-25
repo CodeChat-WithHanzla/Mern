@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserDataContext } from '../context/UserContext';
 const UserProtected = ({ children }) => {
