@@ -46,7 +46,7 @@ function SignUp() {
       if (!res.ok)
         return dispatch(signUpFailure(message))
       dispatch(signUpSuccess(data))
-      navigate('/sign-in')
+      navigate('/')
     } catch (error) {
       dispatch(signUpFailure(error.message))
     }

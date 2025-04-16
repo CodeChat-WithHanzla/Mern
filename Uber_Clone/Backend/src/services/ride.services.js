@@ -1,6 +1,17 @@
 import rideModel from "../models/ride.model.js";
 import { getDistanceTime } from "./map.services.js";
+import crypto from "crypto";
 
+const getOpt = (num) => {
+  const generateOpt = (num) => {
+    const otp = crypto
+      .randomInt(Math.pow(10, num - 1), Math.pow(10, num))
+      .toString();
+    return otp;
+  };
+
+  return generateOpt(num);
+};
 const getFare = async (pickup, destination) => {
   if (!pickup || !destination) {
     throw new Error("Pickup and destination are required");
@@ -21,11 +32,19 @@ const getFare = async (pickup, destination) => {
   };
 
   const fare = {
-    car: baseFare + (distance/1000) * perKmRate.car + (duration/60) * perMinuteRate.car,
-    bike: baseFare + (distance/1000) * perKmRate.bike + (duration/60) * perMinuteRate.bike,
-    auto: baseFare + (distance/1000) * perKmRate.auto + (duration/60) * perMinuteRate.auto,
+    car:
+      baseFare +
+      (distance / 1000) * perKmRate.car +
+      (duration / 60) * perMinuteRate.car,
+    bike:
+      baseFare +
+      (distance / 1000) * perKmRate.bike +
+      (duration / 60) * perMinuteRate.bike,
+    auto:
+      baseFare +
+      (distance / 1000) * perKmRate.auto +
+      (duration / 60) * perMinuteRate.auto,
   };
-  
 
   return fare;
 };
@@ -43,6 +62,7 @@ export const createRide = async ({
     user,
     pickup,
     destination,
+    opt: getOpt(6),
     fare: fare[vehicleType],
   });
   return ride;

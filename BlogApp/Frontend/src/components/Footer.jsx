@@ -34,7 +34,7 @@ export default function FooterCom() {
                             <Footer.Title title='Follow us' />
                             <Footer.LinkGroup col>
                                 <Footer.Link
-                                    href='https://www.instagram.com/codechatwithhanzla/'
+                                    href='http://instagram.com/hanzla._official'
                                     target='_blank'
                                     rel='noopener noreferrer'
                                 >
@@ -49,7 +49,7 @@ export default function FooterCom() {
                     <Footer.Copyright href='#' by="Hanzla's Blog" year={new Date().getFullYear()} />
 
                     <div className="flex gap-6 sm:mt-0 mt4 sm:justify-center mt-3">
-                        <Footer.Icon href='https://www.instagram.com/codechatwithhanzla/' icon={BsInstagram} target='_blank'
+                        <Footer.Icon href='http://instagram.com/hanzla._official' icon={BsInstagram} target='_blank'
                             rel='noopener noreferrer' />
                         <Footer.Icon href='https://github.com/CodeChat-WithHanzla' icon={BsGithub} target='_blank'
                             rel='noopener noreferrer' />

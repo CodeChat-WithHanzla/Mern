@@ -139,7 +139,7 @@ function DashComments() {
                     </Modal>
                 </>
             ) : <div className='flex justify-center items-center min-h-screen'>
-                <Spinner size='xl' />
+                There are currently no comments.
             </div>}</div>
     )
 }

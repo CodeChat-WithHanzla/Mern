@@ -40,6 +40,11 @@ const rideSchema = new Schema({
     type: String,
   },
   signature: {},
+  opt: {
+    type: String,
+    select: false,
+    require: true,
+  },
 });
 const Ride = model("ride", rideSchema);
 export default Ride;

@@ -6,11 +6,11 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "https://hanzla-blog.onrender.com",
+        target: "http://localhost:8000",
         secure: false,
-        changeOrigin: true,
-      },
-    },
+        changeOrigin: true
+      }
+    }
   },
-  plugins: [react()],
+  plugins: [react()]
 });

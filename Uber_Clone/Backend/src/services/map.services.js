@@ -44,8 +44,8 @@ export const getDistanceTime = async (origin, destination) => {
 
     if (response.data.status === "OK") {
       const element = response.data.rows[0].elements[0];
-      const distance = element.distance.value; 
-      const duration = element.duration.value; 
+      const distance = element.distance.value;
+      const duration = element.duration.value;
       return { distance, duration };
     } else {
       throw new Error("Unable to fetch distance and time");

@@ -27,7 +27,7 @@ function SignIn() {
       const { data, message } = await res.json()
       if (!res.ok)
         dispatch(signInFailure(message))
-      if (res.ok) {
+      else {
         dispatch(signInSuccess(data))
         navigate('/')
       }

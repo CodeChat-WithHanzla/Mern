@@ -4,7 +4,7 @@ import {
   ApiError,
   ApiResponse,
   asyncHandler,
-  uploadOnCloudinary,
+  uploadOnCloudinary
 } from "../utils/index.js";
 const generateAccessAndRefreshToken = async (userId) => {
   try {
@@ -46,16 +46,24 @@ export const SignUp = asyncHandler(async (req, res) => {
     username,
     email,
     password: hashedPassword,
-    ProfilePicture: ProfilePicture?.url,
+    ProfilePicture: ProfilePicture?.url
   });
   const createdUser = await User.findById(user._id).select(
     "-password -refreshToken"
   );
   if (!createdUser)
     throw new ApiError(500, "Something went wrong while registering the user");
-
+  const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
+    createdUser._id
+  );
+  const options = {
+    httpOnly: true,
+    secure: true
+  };
   return res
     .status(200)
+    .cookie("AccessToken", accessToken, options)
+    .cookie("RefreshToken", refreshToken, options)
     .json(new ApiResponse(200, createdUser, "Successfull sign-up"));
 });
 export const SignIn = asyncHandler(async (req, res) => {
@@ -76,7 +84,7 @@ export const SignIn = asyncHandler(async (req, res) => {
   );
   const options = {
     httpOnly: true,
-    secure: true,
+    secure: true
   };
   res
     .status(200)
@@ -97,7 +105,7 @@ export const GoogleOAuth = asyncHandler(async (req, res) => {
       );
       const options = {
         httpOnly: true,
-        secure: true,
+        secure: true
       };
       return res
         .status(200)
@@ -111,7 +119,7 @@ export const GoogleOAuth = asyncHandler(async (req, res) => {
         username: name,
         email,
         password: hashedPassword,
-        ProfilePicture: googlePhotoUrl,
+        ProfilePicture: googlePhotoUrl
       });
       const createdUser = await User.findById(user._id).select(
         "-password -refreshToken"
