@@ -28,7 +28,7 @@ function Header() {
   const handleSignOut = async () => {
     try {
       dispatch(signOutStart())
-      const res = await fetch('/api/v1/auth/signout', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/auth/signout`, {
         method: 'POST'
       })
       const { message } = await res.json()

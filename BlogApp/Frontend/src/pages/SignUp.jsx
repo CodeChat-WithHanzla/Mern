@@ -38,7 +38,7 @@ function SignUp() {
 
     try {
       dispatch(signUpStart())
-      const res = await fetch('/api/v1/auth/signup', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/auth/signup`, {
         method: 'POST',
         body: payload,
       })

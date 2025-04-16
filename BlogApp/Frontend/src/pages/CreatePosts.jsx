@@ -59,7 +59,7 @@ function CreatePosts() {
             payload.append(key, value)
         })
         try {
-            const res = await fetch('/api/v1/posts/create-posts', {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/posts/create-posts`, {
                 method: 'POST',
                 body: payload
             })
