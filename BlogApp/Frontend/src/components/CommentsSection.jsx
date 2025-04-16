@@ -18,7 +18,7 @@ function CommentsSection({ postId }) {
                 navigate('/sign-in')
                 return
             }
-            const res = await fetch(`/api/v1/comments/likeComment/${commentId}`, {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/comments/likeComment/${commentId}`, {
                 method: 'PUT'
             })
             if (res.ok) {
@@ -41,7 +41,7 @@ function CommentsSection({ postId }) {
         if (comment.length > 200)
             return
         try {
-            const res = await fetch(`/api/v1/comments/create`, {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/comments/create`, {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json'
@@ -61,7 +61,7 @@ function CommentsSection({ postId }) {
     useEffect(() => {
         const getComments = async () => {
             try {
-                const res = await fetch(`/api/v1/comments/get/${postId}`)
+                const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/comments/get/${postId}`)
                 if (res.ok) {
                     const { data } = await res.json()
                     setComments(data)
@@ -81,7 +81,7 @@ function CommentsSection({ postId }) {
                 navigate('/sign-in')
                 return
             }
-            const res = await fetch(`/api/v1/comments/deleteComments/${commentToDelete}`, { method: "DELETE" })
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/comments/deleteComments/${commentToDelete}`, { method: "DELETE" })
             if (res.ok) {
                 setComments((prev) => prev.filter((comment) => comment._id !== commentToDelete))
                 setShowModal(false)

@@ -21,7 +21,7 @@ function UpdatePosts() {
     useEffect(() => {
         try {
             const fetchPosts = async () => {
-                const res = await fetch(`/api/v1/posts/get-posts?postId=${postId}`)
+                const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/posts/get-posts?postId=${postId}`)
                 const data = await res.json()
 
 
@@ -87,7 +87,7 @@ function UpdatePosts() {
             payload.append(key, value)
         })
         try {
-            const res = await fetch(`/api/v1/posts/update-posts/${postId}/${currentUser._id}`, {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/posts/update-posts/${postId}/${currentUser._id}`, {
                 method: 'PUT',
                 body: payload
             })

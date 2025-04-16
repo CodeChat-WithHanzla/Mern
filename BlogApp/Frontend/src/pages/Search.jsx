@@ -24,7 +24,7 @@ function Search() {
         const fetchPosts = async () => {
             setLoading(true)
             const searchQuery = urlParams.toString()
-            const res = await fetch(`/api/v1/posts/get-posts?${searchQuery}`)
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/posts/get-posts?${searchQuery}`)
             if (!res.ok) {
                 setLoading(false)
                 return;
@@ -65,7 +65,7 @@ function Search() {
         const urlParams = new URLSearchParams(search)
         urlParams.set('startIndex', startIndex)
         const searchQuery = urlParams.toString()
-        const res = await fetch(`/api/v1/posts/get-posts?${searchQuery}`)
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/posts/get-posts?${searchQuery}`)
         if (!res.ok)
             return;
         if (res.ok) {

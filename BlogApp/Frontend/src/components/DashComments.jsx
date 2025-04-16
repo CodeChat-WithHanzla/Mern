@@ -15,7 +15,7 @@ function DashComments() {
     const [isLoading, setIsLoading] = useState(false)
     const fetchComments = async () => {
         try {
-            const res = await fetch(`/api/v1/comments/get`)
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/comments/get`)
             const { data } = await res.json()
             if (res.ok) {
                 setComments(data.comments)
@@ -34,7 +34,7 @@ function DashComments() {
         const startIndex = comments.length
         setIsLoading(true)
         try {
-            const res = await fetch(`/api/v1/comments/get?startIndex=${startIndex}`)
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/comments/get?startIndex=${startIndex}`)
             const { data } = await res.json()
             if (res.ok) {
                 setUsers((prev) => [...prev, ...data.users])
@@ -66,7 +66,7 @@ function DashComments() {
     }
     const handleDeleteComment = async () => {
         try {
-            const res = await fetch(`/api/v1/comments/deleteComments/${commentIdToDelete}`, { method: 'DELETE' })
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/comments/deleteComments/${commentIdToDelete}`, { method: 'DELETE' })
             if (res.ok) {
                 setComments(prev => prev.filter(comment => comment._id !== commentIdToDelete))
                 setShowModal(false)

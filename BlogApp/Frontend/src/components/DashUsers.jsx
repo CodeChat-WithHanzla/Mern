@@ -15,7 +15,7 @@ function DashUsers() {
     const [isLoading, setIsLoading] = useState(false)
     const fetchUsers = async () => {
         try {
-            const res = await fetch(`/api/v1/users/getUsers`)
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/users/getUsers`)
             const { data } = await res.json()
             if (res.ok) {
                 setUsers(data.users)
@@ -34,7 +34,7 @@ function DashUsers() {
         const startIndex = users.length
         setIsLoading(true)
         try {
-            const res = await fetch(`/api/v1/users/getUsers?startIndex=${startIndex}`)
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/users/getUsers?startIndex=${startIndex}`)
             const { data } = await res.json()
             if (res.ok) {
                 setUsers((prev) => [...prev, ...data.users])
@@ -66,7 +66,7 @@ function DashUsers() {
     }
     const handleDeleteUser = async () => {
         try {
-            const res = await fetch(`/api/v1/delete/${userIdToDelete}`, { method: 'DELETE' })
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/delete/${userIdToDelete}`, { method: 'DELETE' })
             if (res.ok) {
                 setUsers(prev => prev.filter(user => user._id !== userIdToDelete))
                 setShowModal(false)

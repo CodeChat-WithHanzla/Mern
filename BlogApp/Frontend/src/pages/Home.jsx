@@ -5,7 +5,7 @@ function Home() {
   const [posts, setPosts] = useState([])
   useEffect(() => {
     const fetchPosts = async () => {
-      const res = await fetch(`/api/v1/posts/get-posts`)
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/posts/get-posts`)
       const { posts } = await res.json()
       setPosts(posts)
     }

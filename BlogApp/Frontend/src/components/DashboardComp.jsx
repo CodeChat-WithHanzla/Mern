@@ -17,7 +17,7 @@ function DashboardComp() {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const res = await fetch(`/api/v1/users/getUsers?limit=5`)
+                const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/users/getUsers?limit=5`)
                 const { data } = await res.json()
                 if (res.ok) {
                     setUsers(data.users)
@@ -30,7 +30,7 @@ function DashboardComp() {
         }
         const fetchPosts = async () => {
             try {
-                const res = await fetch(`/api/v1/posts/get-posts?limit=5`)
+                const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/posts/get-posts?limit=5`)
                 const { posts, totalPosts, lastMonthPosts } = await res.json()
                 setPosts(posts)
                 setTotalPosts(totalPosts)
@@ -41,7 +41,7 @@ function DashboardComp() {
         }
         const fetchComments = async () => {
             try {
-                const res = await fetch(`/api/v1/comments/get?limit=5`)
+                const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/comments/get?limit=5`)
                 const { data } = await res.json()
                 setComments(data.comments)
                 setTotalComments(data.totalComments)

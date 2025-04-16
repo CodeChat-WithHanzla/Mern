@@ -11,7 +11,7 @@ function Posts() {
     const fetchPost = async () => {
         try {
             setIsLoading(true)
-            const res = await fetch(`/api/v1/posts/get-posts?slug=${postSlug}`)
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/posts/get-posts?slug=${postSlug}`)
             const { posts } = await res.json()
             if (!res.ok) {
                 return setError(true)
@@ -33,7 +33,7 @@ function Posts() {
     useEffect(() => {
         try {
             const fetchRequestPosts = async () => {
-                const res = await fetch(`/api/v1/posts/get-posts?limit=3`)
+                const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/posts/get-posts?limit=3`)
                 const { posts } = await res.json()
                 if (res.ok) {
                     setRecentPosts(posts)

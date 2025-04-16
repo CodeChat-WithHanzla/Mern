@@ -83,7 +83,7 @@ function DashProfile() {
         })
         try {
             dispatch(updateStart());
-            const response = await fetch(`/api/v1/update/${currentUser?._id}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/update/${currentUser?._id}`, {
                 method: 'PUT',
                 body: payload
             });
@@ -115,7 +115,7 @@ function DashProfile() {
         setModal(false)
         try {
             dispatch(deleteStart())
-            const response = await fetch(`/api/v1/delete/${currentUser?._id}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/delete/${currentUser?._id}`, {
                 method: 'DELETE'
             })
             const { message } = await response.json()
@@ -132,7 +132,7 @@ function DashProfile() {
     const handleSignOut = async () => {
         try {
             dispatch(signOutStart())
-            const res = await fetch('/api/v1/auth/signout', {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/auth/signout`, {
                 method: 'POST'
             })
             const { message } = await res.json()

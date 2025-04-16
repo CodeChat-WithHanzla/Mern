@@ -12,7 +12,7 @@ function Comment({ comment, onLike, onEdit, onDelete }) {
     useEffect(() => {
         const getUser = async () => {
             try {
-                const res = await fetch(`/api/v1/users/${comment?.userId}`)
+                const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/users/${comment?.userId}`)
                 const { data } = await res.json()
                 if (res.ok)
                     setUser(data)
@@ -41,7 +41,7 @@ function Comment({ comment, onLike, onEdit, onDelete }) {
     }
     const handleSave = async () => {
         try {
-            const res = await fetch(`/api/v1/comments/updateComment/${comment._id}`, { method: "PUT", headers: { "Content-type": "application/json" }, body: JSON.stringify({ content: editedContent }) })
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/comments/updateComment/${comment._id}`, { method: "PUT", headers: { "Content-type": "application/json" }, body: JSON.stringify({ content: editedContent }) })
             if (res.ok) {
                 setIsEditing(false)
                 onEdit(comment, editedContent)
